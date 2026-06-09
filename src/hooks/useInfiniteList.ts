@@ -8,12 +8,14 @@ interface UseInfiniteListProps<T> {
     signal?: AbortSignal
   }) => Promise<{ data: T[] }>
   limit?: number
+  enabled?: boolean
 }
 
 export function useInfiniteList<T>({
   queryKey,
   fetchFn,
   limit = 20,
+  enabled = true,
 }: UseInfiniteListProps<T>) {
   const {
     data,
@@ -29,24 +31,36 @@ export function useInfiniteList<T>({
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.data.length === limit ? allPages.length + 1 : undefined
     },
+    enabled,
   })
 
   const observer = useRef<IntersectionObserver | null>(null)
 
+  const hasNextPageRef = useRef(hasNextPage)
+  const isFetchingNextPageRef = useRef(isFetchingNextPage)
+
+  useEffect(() => {
+    hasNextPageRef.current = hasNextPage
+    isFetchingNextPageRef.current = isFetchingNextPage
+  }, [hasNextPage, isFetchingNextPage])
+
   const sentinelRef = useCallback(
     (node: HTMLElement | null) => {
-      if (isFetchingNextPage) return
       if (observer.current) observer.current.disconnect()
 
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasNextPage) {
+        if (
+          entries[0].isIntersecting &&
+          hasNextPageRef.current &&
+          !isFetchingNextPageRef.current
+        ) {
           fetchNextPage()
         }
       })
 
       if (node) observer.current.observe(node)
     },
-    [isFetchingNextPage, hasNextPage, fetchNextPage]
+    [fetchNextPage]
   )
 
   useEffect(() => {

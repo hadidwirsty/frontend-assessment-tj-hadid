@@ -20,16 +20,16 @@ export const useVehicles = ({
   const prevRouteIds = useRef(routeIds?.join(","))
   const prevTripIds = useRef(tripIds?.join(","))
 
-  useEffect(() => {
-    const currentRouteStr = routeIds?.join(",")
-    const currentTripStr = tripIds?.join(",")
+  const routeIdsStr = routeIds?.join(",") || ""
+  const tripIdsStr = tripIds?.join(",") || ""
 
+  useEffect(() => {
     if (
-      prevRouteIds.current !== currentRouteStr ||
-      prevTripIds.current !== currentTripStr
+      prevRouteIds.current !== routeIdsStr ||
+      prevTripIds.current !== tripIdsStr
     ) {
-      prevRouteIds.current = currentRouteStr
-      prevTripIds.current = currentTripStr
+      prevRouteIds.current = routeIdsStr
+      prevTripIds.current = tripIdsStr
 
       if (page !== 1) {
         setSearchParams((prev) => {
@@ -39,10 +39,13 @@ export const useVehicles = ({
         })
       }
     }
-  }, [routeIds, tripIds, page, setSearchParams])
+  }, [routeIdsStr, tripIdsStr, page, setSearchParams])
 
   const query = useQuery({
-    queryKey: ["vehicles", { page, perPage, routeIds, tripIds }],
+    queryKey: [
+      "vehicles",
+      { page, perPage, routes: routeIdsStr, trips: tripIdsStr },
+    ],
     queryFn: async ({ signal }) => {
       const params: Record<string, string | number> = {
         "page[offset]": (page - 1) * perPage,
