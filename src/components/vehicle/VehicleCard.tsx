@@ -1,6 +1,6 @@
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
-import type { VehicleResource } from "@/types/mbta"
+import type { VehicleResource } from "@/modules/vehicle"
 
 interface VehicleCardProps {
   vehicle: VehicleResource

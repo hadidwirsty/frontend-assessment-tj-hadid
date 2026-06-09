@@ -1,10 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
-import { getVehicleDetail } from "../services/mbta"
-import type {
-  RouteResource,
-  TripResource,
-  VehicleResource,
-} from "../types/mbta"
+import { getVehicleDetail, type VehicleResource } from "@/modules/vehicle"
+import type { RouteResource } from "@/modules/route"
+import type { TripResource } from "@/modules/trip"
 
 export function useVehicleDetail(id: string | null) {
   return useQuery({

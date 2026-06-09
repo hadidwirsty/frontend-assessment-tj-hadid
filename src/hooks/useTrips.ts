@@ -1,6 +1,5 @@
 import { useInfiniteList } from "./useInfiniteList"
-import { getTrips } from "../services/mbta"
-import type { TripResource } from "../types/mbta"
+import { getTrips, type TripResource } from "@/modules/trip"
 
 export function useTrips(routeIds?: string[]) {
   return useInfiniteList<TripResource>({

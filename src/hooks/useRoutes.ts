@@ -1,6 +1,5 @@
 import { useInfiniteList } from "./useInfiniteList"
-import { getRoutes } from "../services/mbta"
-import type { RouteResource } from "../types/mbta"
+import { getRoutes, type RouteResource } from "@/modules/route"
 
 export function useRoutes() {
   return useInfiniteList<RouteResource>({
