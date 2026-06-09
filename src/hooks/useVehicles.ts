@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { useSearchParams } from "react-router-dom"
-import { getVehicles } from "../services/mbta"
+import { getVehicles } from "@/modules/vehicle"
 
 interface UseVehiclesProps {
   page: number
