@@ -1,5 +1,6 @@
 {
-  "name": "vite-app",
+  "name": "frontend-assesment-tj-hadid",
+  "author": "Muhammad Hadid Wiransetyo",
   "private": true,
   "version": "0.0.1",
   "type": "module",
