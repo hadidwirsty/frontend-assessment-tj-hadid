@@ -1,59 +1,117 @@
-# Transjakarta Fleet Management System
+# Fleet Management System — Transjakarta
 
-Aplikasi pemantauan armada berbasis web (*Single Page Application*) yang dibangun untuk Transjakarta Frontend Engineer Technical Assessment. Menggunakan React 19, TypeScript, dan Vite, aplikasi ini memvisualisasikan data real-time kendaraan dari MBTA API.
+Aplikasi pemantauan armada berbasis web (*Single Page Application*) untuk memvisualisasikan data real-time kendaraan secara efisien.
 
-## 🚀 Fitur Utama
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![React 19](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
+![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-- **Real-time Vehicle Monitoring**: Menampilkan grid status kendaraan (lokasi, status terbaru, *timestamp*).
-- **Server-side Pagination**: Menavigasi data kendaraan secara efisien dan performa tinggi (memanfaatkan URL parameters).
-- **Smart Filtering (Infinite Scroll)**: Menyaring kendaraan berdasarkan Rute dan Trip menggunakan *dropdown* pintar berbasis pencarian (*searchable*) dengan fitur *infinite scroll/lazy-load* untuk efisiensi transfer data.
-- **Interactive Details & Map Integration**: Melihat detail informasi kendaraan beserta peta *real-time* lokasinya (menggunakan Leaflet).
-- **URL State Management**: Seluruh parameter filter dan halaman otomatis tersinkronisasi dengan URL untuk kemampuan membagikan link (*shareable*) yang konsisten.
+## Cara Menjalankan Aplikasi
 
-## 🛠️ Tech Stack
+**Prerequisites:**
+- Node.js (direkomendasikan versi 20 atau lebih baru)
+- Package Manager: `pnpm` (direkomendasikan karena terdapat `pnpm-lock.yaml`) atau `npm`
 
-- **Framework**: React 19 + TypeScript + Vite
-- **Styling**: Tailwind CSS v4 + shadcn/ui
-- **Data Fetching & Caching**: TanStack React Query + Axios
-- **Routing**: React Router DOM
-- **Map Component**: Leaflet + react-leaflet
-- **Date Formatting**: date-fns
+**Langkah-langkah:**
+1. **Clone repository:**
+   ```bash
+   git clone <url-repository-ini>
+   cd frontend-assessment-tj-hadid
+   ```
 
-## ⚙️ Arsitektur & Pola Desain
-
-Aplikasi menggunakan struktur proyek **Feature-Based**:
-- `src/components/vehicle/`: Komponen spesifik terkait manajemen tampilan kendaraan.
-- `src/components/filters/`: Komponen generik dan spesifik untuk filter (dropdown interaktif, filter bar).
-- `src/services/mbta.ts`: Lapisan *Data Access* terpusat (API Client) yang bersih menggunakan tipe-tipe TypeScript yang mendefinisikan *interface* respons (di `src/types/mbta.ts`).
-
-### Fetching Data, Caching, & Pagination
-- Digunakan pola **Custom Hooks** (`useVehicles`, `useRoutes`, `useTrips`, `useVehicleDetail`) yang membungkus *TanStack Query*. Ini menciptakan *Separation of Concerns* sehingga komponen UI murni hanya menangani presentasi data tanpa tercampur logika pengambilan API.
-- **Pagination Server-Side**: Komponen `Pagination.tsx` membaca data meta limit/offset dan menangani transisi halaman. Data dikontrol melalui *Query Parameters* react-router-dom agar sinkron dengan state *back/forward* pada browser.
-- **Infinite Scrolling API**: Filter Route dan Trip dirender menggunakan pola *Infinite Query* (dibungkus `useInfiniteList` custom hook) dan dikombinasikan dengan API browser `IntersectionObserver` pada sebuah elemen penanda terbawah (*sentinel node*) untuk memicu *load page* selanjutnya secara otomatis.
-
-## 🏁 Cara Menjalankan Aplikasi Secara Lokal
-
-1. **Instalasi Dependensi**  
-   Direkomendasikan menggunakan `pnpm` sesuai *lockfile*:
+2. **Install dependencies:**
    ```bash
    pnpm install
    ```
 
-2. **Konfigurasi Environment**  
-   Aplikasi membutuhkan `VITE_MBTA_BASE_URL`. Anda dapat menyalin file `.env.example`:
+3. **Setup environment variable:**
+   Salin file `.env.example` menjadi `.env`:
    ```bash
    cp .env.example .env
    ```
+   Pastikan konfigurasi `VITE_MBTA_BASE_URL=https://api-v3.mbta.com` berada di dalam file `.env`.
 
-3. **Jalankan Development Server**  
+4. **Jalankan development server:**
    ```bash
    pnpm run dev
    ```
-   Buka `http://localhost:5173` di browser Anda.
 
-## 📝 Commands / Skrip Tambahan
+5. **Buka di browser:**
+   Akses antarmuka aplikasi melalui `http://localhost:5173`.
 
-- `pnpm run build` : Melakukan build aplikasi statis untuk *production*.
-- `pnpm run lint` : Menjalankan ESLint.
-- `pnpm run format` : Memformat kode dengan konsisten menggunakan Prettier.
-- `pnpm run typecheck` : Mengecek kebenaran *typing* TypeScript secara murni tanpa *emit* build.
+**Perintah Tambahan:**
+- Build production: `pnpm run build`
+- Preview hasil build: `pnpm run preview`
+
+## Fitur Aplikasi
+
+Sesuai dengan requirement penilaian, fitur yang sudah diimplementasikan meliputi:
+- **Vehicle Card Grid + Pagination**: Menampilkan data kendaraan secara dinamis.
+- **Filter Route & Trip (Multi-select + Infinite Scroll)**: Penyaringan cerdas dengan *dropdown* berbasis *lazy load*.
+- **Detail Popup Kendaraan**: Rincian status, rute, dan posisi kendaraan dalam bentuk modal terpusat.
+- **Peta Posisi Kendaraan (Leaflet) — Bonus**: Peta integrasi *real-time* berbasis koordinat.
+- **TypeScript End-to-End — Bonus**: Type-safety murni, selaras dengan skema respon JSON API MBTA.
+
+## Arsitektur yang Digunakan
+
+### 4a. Struktur Direktori
+Aplikasi mengadopsi struktur proyek *Feature-Based* untuk skalabilitas tinggi:
+- `src/modules/`: Modul *domain-specific* seperti tipe data (DTO) dan abstraksi API *Service* (fitur vehicle, route, trip).
+- `src/shared/`: Berisi modul *shared/common* (konfigurasi instansiasi *Axios client*).
+- `src/components/`: Tempat berkumpulnya *Reusable React UI*, dipilah menjadi generik (shadcn) dan *feature-level* (vehicle, filters, map).
+- `src/hooks/`: Koleksi *Custom Hooks* untuk enkapsulasi abstraksi *TanStack Query*.
+- `src/pages/`: Komponen agregasi di tingkat halaman (seperti `Dashboard.tsx`).
+- `src/store/`: Disiapkan untuk arsitektur pengelola state global terpusat (*Zustand*).
+
+### 4b. Metode Pengambilan Data (GET Data)
+- **Library yang digunakan:** Axios (HTTP Client) digabungkan dengan TanStack Query (React Query).
+- **Kenapa TanStack Query:** Menawarkan manajemen asinkron mutakhir (*background refetching*, penanganan otomatis *loading state* & *error state*, serta mekanisme *caching* bawaan).
+- **Pola yang digunakan:** Logika pengambilan data dipisahkan dari layer antarmuka dan dibungkus menjadi *custom hooks* murni (`useVehicles`, `useRoutes`, `useTrips`).
+- **Bagaimana filter dikirim ke API:** Status pada *URL Search Params* dibaca dan diekstraksi ke dalam *query params* bawaan spesifikasi MBTA API (misal: `?filter[route]=...`).
+- **AbortController:** Digunakan secara reaktif untuk membatalkan paket antrean *request* lawas saat pengguna melakukan pemfilteran dengan cepat, mencegah fenomena *race condition*.
+
+### 4c. Library UI yang Digunakan
+- **Tailwind CSS v4:** Menjadi tulang punggung *utility-first styling* murni untuk membangun desain *layout*.
+- **shadcn/ui:** Koleksi komponen visual siap pakai (*Card, Badge, Dialog, Select*) berstatus *copy-paste* untuk fleksibilitas arsitektur.
+- **Lucide React:** Dipakai sebagai penyedia *Icon library* untuk visual grafis elemen pendukung.
+- **Leaflet + React Leaflet:** Menyuntikkan tampilan peta spasial yang mudah dinavigasi (fitur bonus).
+
+### 4d. Implementasi Pagination
+- **Mekanisme Server-Side:** Proses paginasi sepenuhnya dieksekusi di *server* MBTA (*server-side*), membatasi beban *memory client*.
+- **Parameter MBTA API:** Aplikasi memasok parameter `page[limit]` dan `page[offset]`.
+- **Penyimpanan State:** Disimpan sinkron terhadap objek URL Search Params (contoh `?page=1&limit=20`).
+- **Keuntungan URL State:** URL terjamin berstatus *shareable link* dan aksi *back/forward button* di level peramban tetap berfungsi normal.
+- **Komponen Pagination:** Sanggup mempresentasikan indikator rentang (contoh: "Menampilkan 1-20 dari 100 Data"), *dropdown* pilihan jumlah per-halaman, serta pengatur navigasi iterasi.
+
+### 4e. Implementasi Infinite Scroll (Filter Dropdown)
+- **Metodologi Web API:** Menggunakan antarmuka native spesifikasi *IntersectionObserver* Web API.
+- **Elemen Sentinel:** Diposisikan sebagai pengawas elemen semu (*sentinel element*) yang menempel di baris paling ujung daftar antarmuka.
+- **Pemicu Otomatis:** Detik saat ruang *sentinel* masuk tertangkap oleh *viewport*, sistem memanggil otomatis laman data berikutnya.
+- **Reusability:** Seluruh fungsional dirumuskan ke dalam arsitektur utilitas independen `useInfiniteList`.
+
+### 4f. State Management
+- **URL Search Params:** Mengakomodasi filter selektif aktif dan memori paginasi agar halaman seutuhnya bersifat *bookmarkable*.
+- **Zustand:** Disiapkan untuk mengakomodir pengelolaan status global berskala interaksi antarmuka (UI state). *(Catatan teknis nyata: Modal detail kendaraan pada fasa saat ini di-*manage* lewat reaktivitas state React).*
+- **Tidak Menggunakan Redux:** Kompleksitas (*boilerplate*) milik arsitektur Redux dinilai sebagai tindakan manipulasi berlebih dan sangat tidak efisien untuk ukuran skalabilitas proyek ini.
+
+## Tech Stack
+
+| Category | Library / Tool | Version |
+|----------|---------------|---------|
+| UI Framework | react / react-dom | ^19.2.6 |
+| Build Tool | vite | ^8 |
+| Language | typescript | ~6 |
+| Styling | tailwindcss | ^4 |
+| UI Components | shadcn/ui (radix-ui, lucide-react) | various |
+| Formatter/Linter | prettier / eslint | ^3.8.3 / ^10 |
+| Data Fetching | @tanstack/react-query, axios | ^5.101.0, ^1.17.0 |
+| State Management | zustand | ^5.0.14 |
+| Routing | react-router-dom | ^7.17.0 |
+| Map | leaflet, react-leaflet | ^1.9.4, ^5.0.0 |
+
+## Struktur Environment Variable
+
+| Key | Contoh Value | Keterangan |
+|-----|-------------|------------|
+| `VITE_MBTA_BASE_URL` | `https://api-v3.mbta.com` | Base URL resmi untuk komunikasi data endpoint API MBTA |
