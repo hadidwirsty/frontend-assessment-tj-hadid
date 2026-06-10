@@ -62,18 +62,3 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
     </div>
   )
 }
-
-export function VehicleCardSkeleton() {
-  return (
-    <div className="rounded-xl border bg-card p-6 shadow-sm">
-      <div className="flex items-start justify-between">
-        <div className="space-y-2">
-          <div className="h-4 w-24 animate-pulse rounded bg-muted" />
-          <div className="h-3 w-32 animate-pulse rounded bg-muted" />
-        </div>
-        <div className="h-5 w-20 animate-pulse rounded-full bg-muted" />
-      </div>
-      <div className="mt-4 h-3 w-40 animate-pulse rounded bg-muted" />
-    </div>
-  )
-}

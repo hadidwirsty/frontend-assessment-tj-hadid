@@ -2,12 +2,17 @@ import { useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { AlertCircle, Bus } from "lucide-react"
 
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Pagination } from "@/components/Pagination"
-import {
-  VehicleCard,
-  VehicleCardSkeleton,
-} from "@/components/vehicle/VehicleCard"
+import { VehicleCard } from "@/components/vehicle/VehicleCard"
+import { VehicleCardSkeleton } from "@/components/vehicle/VehicleCardSkeleton"
 import { VehicleDetailModal } from "@/components/vehicle/VehicleDetailModal"
 import { useVehicles } from "@/hooks/useVehicles"
 
@@ -60,35 +65,39 @@ export function VehicleGrid() {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col space-y-4 sm:space-y-6">
-      <ScrollArea className="min-h-0 flex-1" scrollFade>
-        <div className="grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          {loading && vehicles.length === 0
-            ? Array.from({ length: perPage }).map((_, i) => (
-                <VehicleCardSkeleton key={i} />
-              ))
-            : vehicles.map((vehicle) => (
-                <VehicleCard
-                  key={vehicle.id}
-                  vehicle={vehicle}
-                  onClick={() => setSelectedVehicleId(vehicle.id)}
-                />
-              ))}
-          {loading && vehicles.length > 0 && (
-            <div className="col-span-full py-4 text-center text-sm text-muted-foreground">
-              Memuat data...
-            </div>
-          )}
-        </div>
-      </ScrollArea>
-
-      {!loading && vehicles.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-          <Bus className="mb-4 h-12 w-12 opacity-20" />
-          <h3 className="text-lg font-medium">Tidak ada kendaraan ditemukan</h3>
-          <p className="text-sm">
-            Coba ubah filter atau kriteria pencarian Anda.
-          </p>
-        </div>
+      {!loading && vehicles.length === 0 ? (
+        <Empty className="flex-1">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <Bus className="size-5" />
+            </EmptyMedia>
+            <EmptyTitle>Tidak ada kendaraan ditemukan</EmptyTitle>
+            <EmptyDescription>
+              Coba ubah filter atau kriteria pencarian Anda.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      ) : (
+        <ScrollArea className="min-h-0 flex-1" scrollFade>
+          <div className="grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            {loading && vehicles.length === 0
+              ? Array.from({ length: perPage }).map((_, i) => (
+                  <VehicleCardSkeleton key={i} />
+                ))
+              : vehicles.map((vehicle) => (
+                  <VehicleCard
+                    key={vehicle.id}
+                    vehicle={vehicle}
+                    onClick={() => setSelectedVehicleId(vehicle.id)}
+                  />
+                ))}
+            {loading && vehicles.length > 0 && (
+              <div className="col-span-full py-4 text-center text-sm text-muted-foreground">
+                Memuat data...
+              </div>
+            )}
+          </div>
+        </ScrollArea>
       )}
 
       {vehicles.length > 0 && (
