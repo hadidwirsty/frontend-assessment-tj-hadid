@@ -36,6 +36,12 @@ export function Pagination({
     pages.push(i)
   }
 
+  let tabletStartPage = Math.max(1, currentPage - 1)
+  const tabletEndPage = Math.min(totalPages, tabletStartPage + 2)
+  if (tabletEndPage - tabletStartPage < 2) {
+    tabletStartPage = Math.max(1, tabletEndPage - 2)
+  }
+
   return (
     <div className="flex flex-col items-center justify-between gap-4 py-4 sm:flex-row">
       <div className="text-sm text-muted-foreground">
@@ -46,7 +52,7 @@ export function Pagination({
       </div>
 
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
+        <div className="hidden items-center gap-2 sm:flex">
           <span className="text-sm text-muted-foreground">Per halaman</span>
           <select
             className="h-8 rounded-md border border-input bg-transparent px-2 text-sm ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden"
@@ -55,7 +61,7 @@ export function Pagination({
               onPerPageChange(Number(e.target.value))
             }}
           >
-            {[5, 10, 20, 50].map((pageSize) => (
+            {[10, 20, 50, 100].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 {pageSize}
               </option>
@@ -79,19 +85,32 @@ export function Pagination({
             <ChevronLeft className="h-4 w-4" />
           </button>
 
-          {pages.map((page) => (
-            <button
-              key={page}
-              onClick={() => onPageChange(page)}
-              className={`inline-flex h-8 w-8 items-center justify-center rounded-md border p-0 text-sm font-medium transition-colors hover:bg-muted ${
-                currentPage === page
-                  ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                  : "bg-transparent"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
+          {pages.map((page) => {
+            const isMobileVisible = page === currentPage
+            const isTabletVisible =
+              page >= tabletStartPage && page <= tabletEndPage
+
+            let displayClass = "hidden lg:inline-flex"
+            if (isMobileVisible) {
+              displayClass = "inline-flex"
+            } else if (isTabletVisible) {
+              displayClass = "hidden md:inline-flex"
+            }
+
+            return (
+              <button
+                key={page}
+                onClick={() => onPageChange(page)}
+                className={`${displayClass} h-8 w-8 items-center justify-center rounded-md border p-0 text-sm font-medium transition-colors hover:bg-muted ${
+                  currentPage === page
+                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                    : "bg-transparent"
+                }`}
+              >
+                {page}
+              </button>
+            )
+          })}
 
           <button
             onClick={() => onPageChange(currentPage + 1)}

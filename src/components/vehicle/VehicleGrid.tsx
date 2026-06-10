@@ -17,7 +17,7 @@ export function VehicleGrid() {
   )
 
   const page = Number(searchParams.get("page")) || 1
-  const perPage = Number(searchParams.get("perPage")) || 20
+  const perPage = Number(searchParams.get("perPage")) || 10
 
   const routeIds = searchParams.getAll("route")
   const tripIds = searchParams.getAll("trip")
