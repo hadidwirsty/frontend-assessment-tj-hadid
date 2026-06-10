@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { AlertCircle, Bus } from "lucide-react"
 
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Pagination } from "@/components/Pagination"
 import {
   VehicleCard,
@@ -57,25 +58,27 @@ export function VehicleGrid() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {loading && vehicles.length === 0
-          ? Array.from({ length: perPage }).map((_, i) => (
-              <VehicleCardSkeleton key={i} />
-            ))
-          : vehicles.map((vehicle) => (
-              <VehicleCard
-                key={vehicle.id}
-                vehicle={vehicle}
-                onClick={() => setSelectedVehicleId(vehicle.id)}
-              />
-            ))}
-        {loading && vehicles.length > 0 && (
-          <div className="col-span-full py-4 text-center text-sm text-muted-foreground">
-            Memuat data...
-          </div>
-        )}
-      </div>
+    <div className="flex min-h-0 flex-1 flex-col space-y-4 sm:space-y-6">
+      <ScrollArea className="min-h-0 flex-1" scrollFade>
+        <div className="grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {loading && vehicles.length === 0
+            ? Array.from({ length: perPage }).map((_, i) => (
+                <VehicleCardSkeleton key={i} />
+              ))
+            : vehicles.map((vehicle) => (
+                <VehicleCard
+                  key={vehicle.id}
+                  vehicle={vehicle}
+                  onClick={() => setSelectedVehicleId(vehicle.id)}
+                />
+              ))}
+          {loading && vehicles.length > 0 && (
+            <div className="col-span-full py-4 text-center text-sm text-muted-foreground">
+              Memuat data...
+            </div>
+          )}
+        </div>
+      </ScrollArea>
 
       {!loading && vehicles.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
@@ -88,13 +91,15 @@ export function VehicleGrid() {
       )}
 
       {vehicles.length > 0 && (
-        <Pagination
-          currentPage={page}
-          totalItems={totalCount}
-          itemsPerPage={perPage}
-          onPageChange={handlePageChange}
-          onPerPageChange={handlePerPageChange}
-        />
+        <div className="mt-auto shrink-0 pt-2 sm:pt-4">
+          <Pagination
+            currentPage={page}
+            totalItems={totalCount}
+            itemsPerPage={perPage}
+            onPageChange={handlePageChange}
+            onPerPageChange={handlePerPageChange}
+          />
+        </div>
       )}
 
       {selectedVehicleId && (
