@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { Routes, Route, Navigate } from "react-router-dom"
 import { Dashboard } from "@/pages/Dashboard"
 import { useThemeStore } from "@/store/themeStore"
+import { ToastProvider } from "@/components/ui/toast"
 
 function App() {
   const { theme } = useThemeStore()
@@ -16,10 +17,12 @@ function App() {
   }, [theme])
 
   return (
-    <Routes>
-      <Route path="/" element={<Dashboard />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <ToastProvider>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </ToastProvider>
   )
 }
 

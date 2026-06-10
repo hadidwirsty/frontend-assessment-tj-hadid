@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
 import { AlertCircle, Bus } from "lucide-react"
 
@@ -10,6 +10,8 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Spinner } from "@/components/ui/spinner"
+import { toastManager } from "@/components/ui/toast"
 import { Pagination } from "@/components/Pagination"
 import { VehicleCard } from "@/components/vehicle/VehicleCard"
 import { VehicleCardSkeleton } from "@/components/vehicle/VehicleCardSkeleton"
@@ -34,6 +36,17 @@ export function VehicleGrid() {
     routeIds,
     tripIds,
   })
+
+  useEffect(() => {
+    if (error) {
+      toastManager.add({
+        type: "error",
+        title: "Gagal Memuat Data",
+        description:
+          error.message || "Terjadi kesalahan saat menghubungi server.",
+      })
+    }
+  }, [error])
 
   const handlePageChange = (newPage: number) => {
     setSearchParams((prev) => {
@@ -92,8 +105,9 @@ export function VehicleGrid() {
                   />
                 ))}
             {loading && vehicles.length > 0 && (
-              <div className="col-span-full py-4 text-center text-sm text-muted-foreground">
-                Memuat data...
+              <div className="col-span-full flex items-center justify-center gap-2 py-4 text-sm text-muted-foreground">
+                <Spinner className="size-4" />
+                <span>Memuat data...</span>
               </div>
             )}
           </div>

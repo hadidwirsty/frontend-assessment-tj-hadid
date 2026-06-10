@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom"
 import { FilterBar } from "@/components/filters/FilterBar"
 import { VehicleGrid } from "@/components/vehicle/VehicleGrid"
 import { ThemeToggle } from "@/components/ui/ThemeToggle"
+import { toastManager } from "@/components/ui/toast"
 
 export function Dashboard() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -37,6 +38,12 @@ export function Dashboard() {
       newParams.delete("trip")
       newParams.set("page", "1")
       return newParams
+    })
+
+    toastManager.add({
+      type: "success",
+      title: "Filter Di-reset",
+      description: "Semua filter kendaraan telah dihapus.",
     })
   }
 

@@ -95,8 +95,11 @@ function Toasts({
           return (
             <Toast.Root
               key={toast.id}
+              data-type={toast.type}
               className={cn(
-                "absolute z-[calc(9999-var(--toast-index))] h-(--toast-calc-height) w-full rounded-lg border bg-[color-mix(in_srgb,var(--popover),var(--color-black)_calc(1%*max(0,var(--toast-index,0))))] text-popover-foreground shadow-lg/5 select-none [transition:transform_.5s_cubic-bezier(.22,1,.36,1),opacity_.5s,height_.15s,background-color_.5s] not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] data-expanded:bg-popover dark:bg-[color-mix(in_srgb,var(--popover),var(--color-black)_calc(6%*max(0,var(--toast-index,0))))] dark:before:shadow-[0_-1px_--theme(--color-white/6%)] dark:data-expanded:bg-popover",
+                "group absolute z-[calc(9999-var(--toast-index))] h-(--toast-calc-height) w-full rounded-lg border bg-[color-mix(in_srgb,var(--popover),var(--color-black)_calc(1%*max(0,var(--toast-index,0))))] text-popover-foreground shadow-lg/5 select-none [transition:transform_.5s_cubic-bezier(.22,1,.36,1),opacity_.5s,height_.15s,background-color_.5s] not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-lg)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] data-expanded:bg-popover dark:bg-[color-mix(in_srgb,var(--popover),var(--color-black)_calc(6%*max(0,var(--toast-index,0))))] dark:before:shadow-[0_-1px_--theme(--color-white/6%)] dark:data-expanded:bg-popover",
+                "data-[type=success]:border-green-200 data-[type=success]:bg-green-50 data-[type=success]:text-green-700 dark:data-[type=success]:border-green-900 dark:data-[type=success]:bg-green-950 dark:data-[type=success]:text-green-400",
+                "data-[type=error]:border-red-200 data-[type=error]:bg-red-50 data-[type=error]:text-red-700 dark:data-[type=error]:border-red-900 dark:data-[type=error]:bg-red-950 dark:data-[type=error]:text-red-400",
                 // Base positioning using data-position
                 "data-[position*=right]:right-0 data-[position*=right]:left-auto",
                 "data-[position*=left]:right-auto data-[position*=left]:left-0",
@@ -159,7 +162,7 @@ function Toasts({
                       data-slot="toast-title"
                     />
                     <Toast.Description
-                      className="text-muted-foreground"
+                      className="text-muted-foreground group-data-[type=error]:text-red-700 group-data-[type=success]:text-green-700 dark:group-data-[type=error]:text-red-500 dark:group-data-[type=success]:text-green-500"
                       data-slot="toast-description"
                     />
                   </div>
@@ -215,8 +218,11 @@ function AnchoredToasts({
               toast={toast}
             >
               <Toast.Root
+                data-type={toast.type}
                 className={cn(
-                  "relative border bg-popover text-xs text-balance text-popover-foreground transition-[scale,opacity] not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:shadow-[0_1px_--theme(--color-black/4%)] data-ending-style:scale-98 data-ending-style:opacity-0 data-starting-style:scale-98 data-starting-style:opacity-0 dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
+                  "group relative border bg-popover text-xs text-balance text-popover-foreground transition-[scale,opacity] not-dark:bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:shadow-[0_1px_--theme(--color-black/4%)] data-ending-style:scale-98 data-ending-style:opacity-0 data-starting-style:scale-98 data-starting-style:opacity-0 dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
+                  "data-[type=success]:border-green-200 data-[type=success]:bg-green-50 data-[type=success]:text-green-700 dark:data-[type=success]:border-green-900 dark:data-[type=success]:bg-green-950 dark:data-[type=success]:text-green-400",
+                  "data-[type=error]:border-red-200 data-[type=error]:bg-red-50 data-[type=error]:text-red-700 dark:data-[type=error]:border-red-900 dark:data-[type=error]:bg-red-950 dark:data-[type=error]:text-red-400",
                   tooltipStyle
                     ? "rounded-md shadow-md/5 before:rounded-[calc(var(--radius-md)-1px)]"
                     : "rounded-lg shadow-lg/5 before:rounded-[calc(var(--radius-lg)-1px)]",
@@ -248,7 +254,7 @@ function AnchoredToasts({
                           data-slot="toast-title"
                         />
                         <Toast.Description
-                          className="text-muted-foreground"
+                          className="text-muted-foreground group-data-[type=error]:text-red-700 group-data-[type=success]:text-green-700 dark:group-data-[type=error]:text-red-500 dark:group-data-[type=success]:text-green-500"
                           data-slot="toast-description"
                         />
                       </div>
