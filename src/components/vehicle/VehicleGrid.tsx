@@ -18,7 +18,7 @@ export function VehicleGrid() {
   )
 
   const page = Number(searchParams.get("page")) || 1
-  const perPage = Number(searchParams.get("perPage")) || 10
+  const [perPage, setPerPage] = useState(10)
 
   const routeIds = searchParams.getAll("route")
   const tripIds = searchParams.getAll("trip")
@@ -39,9 +39,10 @@ export function VehicleGrid() {
   }
 
   const handlePerPageChange = (newPerPage: number) => {
+    setPerPage(newPerPage)
     setSearchParams((prev) => {
       const newParams = new URLSearchParams(prev)
-      newParams.set("perPage", newPerPage.toString())
+      newParams.delete("perPage")
       newParams.set("page", "1")
       return newParams
     })
