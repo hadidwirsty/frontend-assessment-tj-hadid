@@ -1,6 +1,5 @@
-import { format } from "date-fns"
-import { id } from "date-fns/locale"
 import type { VehicleResource } from "@/modules/vehicle"
+import { getVehicleStatusColor, formatVehicleDate } from "@/lib/utils"
 
 interface VehicleCardProps {
   vehicle: VehicleResource
@@ -11,22 +10,7 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
   const { current_status, label, latitude, longitude, updated_at } =
     vehicle.attributes
 
-  const getStatusColor = (status: string | null) => {
-    switch (status) {
-      case "IN_TRANSIT_TO":
-        return "bg-blue-50 text-blue-700"
-      case "STOPPED_AT":
-        return "bg-green-50 text-green-700"
-      case "INCOMING_AT":
-        return "bg-yellow-50 text-yellow-700"
-      default:
-        return "bg-gray-50 text-gray-700"
-    }
-  }
-
-  const formattedDate = updated_at
-    ? format(new Date(updated_at), "dd MMM yyyy, HH:mm", { locale: id })
-    : "-"
+  const formattedDate = formatVehicleDate(updated_at)
 
   return (
     <div
@@ -42,7 +26,7 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
           </div>
           {current_status && (
             <span
-              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${getStatusColor(
+              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${getVehicleStatusColor(
                 current_status
               )}`}
             >

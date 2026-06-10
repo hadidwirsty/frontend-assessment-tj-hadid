@@ -1,12 +1,11 @@
 import { Suspense, lazy, useEffect } from "react"
 import { X, AlertCircle } from "lucide-react"
-import { format } from "date-fns"
 import { useVehicleDetail } from "@/hooks/useVehicleDetail"
 import { Skeleton } from "@/components/ui/skeleton"
 import { VehicleDetailSkeleton } from "@/components/vehicle/VehicleDetailSkeleton"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
-import { id } from "date-fns/locale/id"
+import { getVehicleStatusColor, formatVehicleDate } from "@/lib/utils"
 
 const VehicleMap = lazy(() =>
   import("../map/VehicleMap").then((module) => ({
@@ -93,16 +92,17 @@ export function VehicleDetailModal({
                   </h3>
                   <p className="mt-1 text-sm text-muted-foreground">
                     Terakhir diperbarui:{" "}
-                    {data.vehicle.attributes.updated_at
-                      ? format(
-                          new Date(data.vehicle.attributes.updated_at),
-                          "dd MMMM yyyy, HH:mm:ss",
-                          { locale: id }
-                        )
-                      : "-"}
+                    {formatVehicleDate(
+                      data.vehicle.attributes.updated_at,
+                      "dd MMMM yyyy, HH:mm:ss"
+                    )}
                   </p>
                 </div>
-                <span className="inline-flex items-center rounded-full bg-secondary px-2.5 py-0.5 text-xs font-semibold text-secondary-foreground">
+                <span
+                  className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${getVehicleStatusColor(
+                    data.vehicle.attributes.current_status
+                  )}`}
+                >
                   {data.vehicle.attributes.current_status?.replace(/_/g, " ")}
                 </span>
               </div>
