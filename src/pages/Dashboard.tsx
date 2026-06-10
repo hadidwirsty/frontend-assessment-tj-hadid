@@ -30,6 +30,16 @@ export function Dashboard() {
     })
   }
 
+  const handleResetFilters = () => {
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev)
+      newParams.delete("route")
+      newParams.delete("trip")
+      newParams.set("page", "1")
+      return newParams
+    })
+  }
+
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-background">
       <header className="shrink-0 border-b bg-card">
@@ -62,6 +72,7 @@ export function Dashboard() {
             selectedTripIds={selectedTripIds}
             onChangeRoutes={handleRoutesChange}
             onChangeTrips={handleTripsChange}
+            onResetAll={handleResetFilters}
           />
         </div>
 

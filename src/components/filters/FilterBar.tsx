@@ -7,6 +7,7 @@ interface FilterBarProps {
   selectedTripIds: string[]
   onChangeRoutes: (routes: string[]) => void
   onChangeTrips: (trips: string[]) => void
+  onResetAll: () => void
 }
 
 export function FilterBar({
@@ -14,6 +15,7 @@ export function FilterBar({
   selectedTripIds,
   onChangeRoutes,
   onChangeTrips,
+  onResetAll,
 }: FilterBarProps) {
   const {
     items: routes,
@@ -48,11 +50,6 @@ export function FilterBar({
   const clearRoutes = () => onChangeRoutes([])
   const clearTrips = () => onChangeTrips([])
 
-  const resetAll = () => {
-    clearRoutes()
-    clearTrips()
-  }
-
   const hasAnyFilter = selectedRouteIds.length > 0 || selectedTripIds.length > 0
 
   return (
@@ -72,7 +69,11 @@ export function FilterBar({
       />
 
       <MultiSelectDropdown
-        label="Pilih Trip"
+        label={
+          selectedRouteIds.length === 0
+            ? "Pilih Trip (Pilih rute dulu)"
+            : "Pilih Trip"
+        }
         items={trips.map((t) => ({
           id: t.id,
           label: t.attributes.headsign || t.attributes.name || t.id,
@@ -87,7 +88,7 @@ export function FilterBar({
 
       {hasAnyFilter && (
         <button
-          onClick={resetAll}
+          onClick={onResetAll}
           className="text-sm font-medium text-muted-foreground underline underline-offset-4 hover:text-foreground"
         >
           Reset Filter
