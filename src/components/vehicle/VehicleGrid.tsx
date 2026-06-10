@@ -61,7 +61,7 @@ export function VehicleGrid() {
   return (
     <div className="flex min-h-0 flex-1 flex-col space-y-4 sm:space-y-6">
       <ScrollArea className="min-h-0 flex-1" scrollFade>
-        <div className="grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 pb-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {loading && vehicles.length === 0
             ? Array.from({ length: perPage }).map((_, i) => (
                 <VehicleCardSkeleton key={i} />

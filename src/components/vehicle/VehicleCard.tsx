@@ -14,13 +14,13 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
   const getStatusColor = (status: string | null) => {
     switch (status) {
       case "IN_TRANSIT_TO":
-        return "bg-blue-100 text-blue-800"
+        return "bg-blue-50 text-blue-700"
       case "STOPPED_AT":
-        return "bg-green-100 text-green-800"
+        return "bg-green-50 text-green-700"
       case "INCOMING_AT":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-50 text-yellow-700"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-50 text-gray-700"
     }
   }
 
@@ -31,17 +31,14 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
   return (
     <div
       onClick={onClick}
-      className="cursor-pointer rounded-xl border bg-card text-card-foreground shadow-sm transition-colors hover:bg-muted/50"
+      className="cursor-pointer rounded-xl border border-l-6 border-primary/20 bg-card text-card-foreground shadow-sm transition-colors hover:bg-muted/50"
     >
-      <div className="p-6">
+      <div className="space-y-6 p-6">
         <div className="flex items-start justify-between">
           <div>
             <h3 className="leading-none font-semibold tracking-tight">
               {label || vehicle.id}
             </h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Lat: {latitude}, Lng: {longitude}
-            </p>
           </div>
           {current_status && (
             <span
@@ -53,7 +50,12 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
             </span>
           )}
         </div>
-        <div className="mt-4 text-xs text-muted-foreground">
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            Lat: {latitude} - Lng: {longitude}
+          </p>
+        </div>
+        <div className="text-xs text-muted-foreground">
           Diperbarui: {formattedDate}
         </div>
       </div>
