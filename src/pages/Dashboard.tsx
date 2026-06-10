@@ -1,7 +1,5 @@
 import { useSearchParams } from "react-router-dom"
 
-import { BusFront } from "lucide-react"
-
 import { FilterBar } from "@/components/filters/FilterBar"
 import { VehicleGrid } from "@/components/vehicle/VehicleGrid"
 import { ThemeToggle } from "@/components/ui/ThemeToggle"
@@ -37,9 +35,11 @@ export function Dashboard() {
       <header className="border-b bg-card">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-2 text-primary">
-            <div className="rounded bg-primary p-0.5">
-              <BusFront className="size-5 text-white" />
-            </div>
+            <img
+              src="/favicon.svg"
+              alt="Transjakarta Logo"
+              className="size-6"
+            />
             <h1 className="text-xl font-bold tracking-tight">
               Transjakarta Fleet
             </h1>
