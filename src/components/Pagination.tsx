@@ -4,6 +4,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface PaginationProps {
   currentPage: number
@@ -70,20 +71,22 @@ export function Pagination({
         </div>
 
         <div className="flex items-center gap-1">
-          <button
+          <Button
+            variant="outline"
+            size="icon"
             onClick={() => onPageChange(1)}
             disabled={currentPage === 1}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-transparent p-0 hover:bg-muted disabled:pointer-events-none disabled:opacity-50"
           >
-            <ChevronsLeft className="h-4 w-4" />
-          </button>
-          <button
+            <ChevronsLeft />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-transparent p-0 hover:bg-muted disabled:pointer-events-none disabled:opacity-50"
           >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
+            <ChevronLeft />
+          </Button>
 
           {pages.map((page) => {
             const isMobileVisible = page === currentPage
@@ -98,34 +101,34 @@ export function Pagination({
             }
 
             return (
-              <button
+              <Button
                 key={page}
+                variant={currentPage === page ? "default" : "outline"}
+                size="icon"
                 onClick={() => onPageChange(page)}
-                className={`${displayClass} h-8 w-8 items-center justify-center rounded-md border p-0 text-sm font-medium transition-colors hover:bg-muted ${
-                  currentPage === page
-                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                    : "bg-transparent"
-                }`}
+                className={displayClass}
               >
                 {page}
-              </button>
+              </Button>
             )
           })}
 
-          <button
+          <Button
+            variant="outline"
+            size="icon"
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-transparent p-0 hover:bg-muted disabled:pointer-events-none disabled:opacity-50"
           >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-          <button
+            <ChevronRight />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
             onClick={() => onPageChange(totalPages)}
             disabled={currentPage === totalPages}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-transparent p-0 hover:bg-muted disabled:pointer-events-none disabled:opacity-50"
           >
-            <ChevronsRight className="h-4 w-4" />
-          </button>
+            <ChevronsRight />
+          </Button>
         </div>
       </div>
     </div>

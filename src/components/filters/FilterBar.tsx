@@ -1,6 +1,7 @@
 import { useRoutes } from "@/hooks/useRoutes"
 import { useTrips } from "@/hooks/useTrips"
 import { MultiSelectDropdown } from "./MultiSelectDropdown"
+import { Button } from "@/components/ui/button"
 
 interface FilterBarProps {
   selectedRouteIds: string[]
@@ -87,12 +88,13 @@ export function FilterBar({
       />
 
       {hasAnyFilter && (
-        <button
+        <Button
+          variant="link"
           onClick={onResetAll}
-          className="text-sm font-medium text-muted-foreground underline underline-offset-4 hover:text-foreground"
+          className="text-sm font-medium text-muted-foreground hover:text-foreground"
         >
           Reset Filter
-        </button>
+        </Button>
       )}
     </div>
   )

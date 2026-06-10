@@ -1,11 +1,12 @@
 import { Suspense, lazy, useEffect } from "react"
 import { X, AlertCircle } from "lucide-react"
 import { format } from "date-fns"
-import { id } from "date-fns/locale"
-
 import { useVehicleDetail } from "@/hooks/useVehicleDetail"
 import { Skeleton } from "@/components/ui/skeleton"
 import { VehicleDetailSkeleton } from "@/components/vehicle/VehicleDetailSkeleton"
+import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
+import { id } from "date-fns/locale/id"
 
 const VehicleMap = lazy(() =>
   import("../map/VehicleMap").then((module) => ({
@@ -70,12 +71,14 @@ export function VehicleDetailModal({
       >
         <div className="flex items-center justify-between border-b p-4">
           <h2 className="text-lg font-semibold">Detail Kendaraan</h2>
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={onClose}
-            className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden"
+            className="rounded-sm opacity-70 transition-opacity hover:opacity-100"
           >
             <X className="h-4 w-4" />
-          </button>
+          </Button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 md:p-6">
@@ -131,8 +134,9 @@ export function VehicleDetailModal({
                 <h4 className="mb-3 text-sm font-medium">Lokasi Saat Ini</h4>
                 <Suspense
                   fallback={
-                    <Skeleton className="flex h-64 w-full items-center justify-center text-muted-foreground">
-                      Memuat Peta...
+                    <Skeleton className="flex h-64 w-full flex-col items-center justify-center gap-2 text-muted-foreground">
+                      <Spinner className="size-6 text-primary" />
+                      <span>Memuat Peta...</span>
                     </Skeleton>
                   }
                 >
