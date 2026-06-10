@@ -4,6 +4,8 @@ import { format } from "date-fns"
 import { id } from "date-fns/locale"
 
 import { useVehicleDetail } from "@/hooks/useVehicleDetail"
+import { Skeleton } from "@/components/ui/skeleton"
+import { VehicleDetailSkeleton } from "@/components/vehicle/VehicleDetailSkeleton"
 
 const VehicleMap = lazy(() =>
   import("../map/VehicleMap").then((module) => ({
@@ -22,7 +24,6 @@ export function VehicleDetailModal({
 }: VehicleDetailModalProps) {
   const { data, isLoading, error } = useVehicleDetail(vehicleId)
 
-  // Handle escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose()
@@ -31,7 +32,6 @@ export function VehicleDetailModal({
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [onClose])
 
-  // Prevent background scroll
   useEffect(() => {
     document.body.style.overflow = "hidden"
     return () => {
@@ -66,7 +66,7 @@ export function VehicleDetailModal({
     >
       <div
         className="relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl bg-background shadow-lg"
-        onClick={(e) => e.stopPropagation()} // Prevent close when clicking inside modal
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b p-4">
           <h2 className="text-lg font-semibold">Detail Kendaraan</h2>
@@ -80,15 +80,7 @@ export function VehicleDetailModal({
 
         <div className="flex-1 overflow-y-auto p-4 md:p-6">
           {isLoading || !data ? (
-            <div className="space-y-4">
-              <div className="h-8 w-1/3 animate-pulse rounded bg-muted" />
-              <div className="h-4 w-1/4 animate-pulse rounded bg-muted" />
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="h-20 animate-pulse rounded bg-muted" />
-                <div className="h-20 animate-pulse rounded bg-muted" />
-              </div>
-              <div className="h-64 w-full animate-pulse rounded bg-muted" />
-            </div>
+            <VehicleDetailSkeleton />
           ) : (
             <div className="space-y-6">
               <div className="flex items-start justify-between">
@@ -139,9 +131,9 @@ export function VehicleDetailModal({
                 <h4 className="mb-3 text-sm font-medium">Lokasi Saat Ini</h4>
                 <Suspense
                   fallback={
-                    <div className="flex h-64 w-full animate-pulse items-center justify-center rounded-md bg-muted text-muted-foreground">
+                    <Skeleton className="flex h-64 w-full items-center justify-center text-muted-foreground">
                       Memuat Peta...
-                    </div>
+                    </Skeleton>
                   }
                 >
                   <VehicleMap
