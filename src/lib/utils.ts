@@ -4,23 +4,24 @@ import { id } from "date-fns/locale/id"
 import { twMerge } from "tailwind-merge"
 
 import type { ClassValue } from "clsx"
+import type { BadgeProps } from "@/components/ui/badge"
 
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs))
 }
 
-export function getVehicleStatusColor(
+export function getVehicleStatusVariant(
   status: string | null | undefined
-): string {
+): BadgeProps["variant"] {
   switch (status) {
     case "IN_TRANSIT_TO":
-      return "bg-blue-50 text-blue-700"
+      return "info"
     case "STOPPED_AT":
-      return "bg-green-50 text-green-700"
+      return "success"
     case "INCOMING_AT":
-      return "bg-yellow-50 text-yellow-700"
+      return "warning"
     default:
-      return "bg-gray-50 text-gray-700"
+      return "secondary"
   }
 }
 
@@ -61,17 +62,18 @@ export function getOccupancyLabel(status: OccupancyStatus | null): string {
   }
 }
 
-export function getOccupancyColor(status: OccupancyStatus | null): string {
+export function getOccupancyVariant(
+  status: OccupancyStatus | null
+): BadgeProps["variant"] {
   switch (status) {
     case "MANY_SEATS_AVAILABLE":
-      return "bg-green-500"
+      return "success"
     case "FEW_SEATS_AVAILABLE":
-      return "bg-yellow-500"
     case "STANDING_ROOM_ONLY":
-      return "bg-orange-500"
+      return "warning"
     case "FULL":
-      return "bg-red-500"
+      return "destructive"
     default:
-      return "bg-gray-400"
+      return "secondary"
   }
 }
