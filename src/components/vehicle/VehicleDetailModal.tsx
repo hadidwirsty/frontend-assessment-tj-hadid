@@ -1,17 +1,34 @@
 import { Suspense, lazy, useEffect } from "react"
-import { X, AlertCircle } from "lucide-react"
-import { useVehicleDetail } from "@/hooks/useVehicleDetail"
-import { Skeleton } from "@/components/ui/skeleton"
-import { VehicleDetailSkeleton } from "@/components/vehicle/VehicleDetailSkeleton"
+
+import { Accessibility, AlertCircle, Bike, ChevronDown, X } from "lucide-react"
+
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Spinner } from "@/components/ui/spinner"
 import {
-  getVehicleStatusColor,
-  formatVehicleDate,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import { Meter } from "@/components/ui/meter"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Spinner } from "@/components/ui/spinner"
+
+import { VehicleDetailSkeleton } from "@/components/vehicle/VehicleDetailSkeleton"
+
+import { useVehicleDetail } from "@/hooks/useVehicleDetail"
+import {
   bearingToCompass,
-  speedToKmh,
+  formatVehicleDate,
   getOccupancyLabel,
-  getOccupancyColor,
+  getOccupancyVariant,
+  getVehicleStatusVariant,
+  speedToKmh,
 } from "@/lib/utils"
 
 const VehicleMap = lazy(() =>
@@ -75,7 +92,7 @@ export function VehicleDetailModal({
         className="relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl bg-background shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b p-4">
+        <div className="flex flex-shrink-0 items-center justify-between border-b p-4">
           <h2 className="text-lg font-semibold">Detail Kendaraan</h2>
           <Button
             variant="ghost"
@@ -105,13 +122,13 @@ export function VehicleDetailModal({
                     )}
                   </p>
                 </div>
-                <span
-                  className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${getVehicleStatusColor(
+                <Badge
+                  variant={getVehicleStatusVariant(
                     data.vehicle.attributes.current_status
-                  )}`}
+                  )}
                 >
                   {data.vehicle.attributes.current_status?.replace(/_/g, " ")}
-                </span>
+                </Badge>
               </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -201,13 +218,9 @@ export function VehicleDetailModal({
                       </div>
                       <div className="mt-1">
                         {data.vehicle.attributes.revenue === "REVENUE" ? (
-                          <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-200">
-                            Beroperasi
-                          </span>
+                          <Badge variant="success">Beroperasi</Badge>
                         ) : (
-                          <span className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800 dark:bg-gray-800 dark:text-gray-200">
-                            Non-Operasional
-                          </span>
+                          <Badge variant="secondary">Non-Operasional</Badge>
                         )}
                       </div>
                     </div>
@@ -218,11 +231,11 @@ export function VehicleDetailModal({
               {/* SECTION B & C Wrapper */}
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 {/* SECTION B: Detail Rute */}
-                {data.route && (
-                  <div>
-                    <h4 className="mb-3 border-b pb-2 text-sm font-medium">
-                      Detail Rute
-                    </h4>
+                <div>
+                  <h4 className="mb-3 border-b pb-2 text-sm font-medium">
+                    Detail Rute
+                  </h4>
+                  {data.route ? (
                     <div className="space-y-3">
                       <div>
                         <span
@@ -273,15 +286,26 @@ export function VehicleDetailModal({
                           </div>
                         )}
                     </div>
-                  </div>
-                )}
+                  ) : (
+                    <Empty className="px-0 py-6">
+                      <EmptyHeader>
+                        <EmptyTitle className="text-base">
+                          Rute Tidak Tersedia
+                        </EmptyTitle>
+                        <EmptyDescription>
+                          Data rute tidak ditemukan untuk kendaraan ini.
+                        </EmptyDescription>
+                      </EmptyHeader>
+                    </Empty>
+                  )}
+                </div>
 
                 {/* SECTION C: Detail Trip */}
-                {data.trip && (
-                  <div>
-                    <h4 className="mb-3 border-b pb-2 text-sm font-medium">
-                      Detail Trip
-                    </h4>
+                <div>
+                  <h4 className="mb-3 border-b pb-2 text-sm font-medium">
+                    Detail Trip
+                  </h4>
+                  {data.trip ? (
                     <div className="space-y-3">
                       <div>
                         <div className="text-xs text-muted-foreground">
@@ -297,10 +321,10 @@ export function VehicleDetailModal({
                         </div>
                         <div className="flex items-center gap-2 text-sm font-medium">
                           {data.trip.attributes.wheelchair_accessible === 1 ? (
-                            <>
-                              <span className="text-lg">♿</span> Dapat diakses
-                              kursi roda
-                            </>
+                            <Badge variant="info" className="gap-1.5">
+                              <Accessibility className="h-4 w-4" /> Dapat
+                              diakses kursi roda
+                            </Badge>
                           ) : (
                             <span className="text-muted-foreground">-</span>
                           )}
@@ -312,67 +336,82 @@ export function VehicleDetailModal({
                         </div>
                         <div className="flex items-center gap-2 text-sm font-medium">
                           {data.trip.attributes.bikes_allowed === 1 ? (
-                            <>
-                              <span className="text-lg">🚲</span> Sepeda
-                              diizinkan
-                            </>
+                            <Badge variant="info" className="gap-1.5">
+                              <Bike className="h-4 w-4" /> Sepeda diizinkan
+                            </Badge>
                           ) : (
                             <span className="text-muted-foreground">-</span>
                           )}
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  ) : (
+                    <Empty className="px-0 py-6">
+                      <EmptyHeader>
+                        <EmptyTitle className="text-base">
+                          Trip Tidak Tersedia
+                        </EmptyTitle>
+                        <EmptyDescription>
+                          Data perjalanan tidak ditemukan.
+                        </EmptyDescription>
+                      </EmptyHeader>
+                    </Empty>
+                  )}
+                </div>
               </div>
 
               {/* SECTION D: Informasi Gerbong */}
               {data.vehicle.attributes.carriages &&
                 data.vehicle.attributes.carriages.length > 0 && (
-                  <div>
-                    <h4 className="mb-3 border-b pb-2 text-sm font-medium">
-                      Informasi Gerbong
-                    </h4>
-                    <div className="space-y-3">
-                      {data.vehicle.attributes.carriages.map(
-                        (carriage, idx) => (
-                          <div
-                            key={idx}
-                            className="flex flex-col gap-2 rounded-lg border p-3"
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="text-sm font-medium">
-                                {carriage.label || `Gerbong ${idx + 1}`}
-                              </span>
-                              {carriage.occupancy_status && (
-                                <span
-                                  className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold text-white ${getOccupancyColor(carriage.occupancy_status)}`}
-                                >
-                                  {getOccupancyLabel(carriage.occupancy_status)}
+                  <Collapsible>
+                    <CollapsibleTrigger className="group flex w-full items-center justify-between border-b pb-2">
+                      <h4 className="text-sm font-medium">
+                        Informasi Gerbong (
+                        {data.vehicle.attributes.carriages.length} gerbong)
+                      </h4>
+                      <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <div className="space-y-3 pt-3">
+                        {data.vehicle.attributes.carriages.map(
+                          (carriage, idx) => (
+                            <div
+                              key={idx}
+                              className="flex flex-col gap-3 rounded-lg border p-3"
+                            >
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm font-medium">
+                                  {carriage.label || `Gerbong ${idx + 1}`}
                                 </span>
-                              )}
-                            </div>
-                            {carriage.occupancy_percentage !== null &&
-                              carriage.occupancy_percentage !== undefined && (
-                                <div className="flex items-center gap-2">
-                                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-secondary">
-                                    <div
-                                      className="h-full bg-primary transition-all"
-                                      style={{
-                                        width: `${carriage.occupancy_percentage}%`,
-                                      }}
+                                {carriage.occupancy_status && (
+                                  <Badge
+                                    variant={getOccupancyVariant(
+                                      carriage.occupancy_status
+                                    )}
+                                  >
+                                    {getOccupancyLabel(
+                                      carriage.occupancy_status
+                                    )}
+                                  </Badge>
+                                )}
+                              </div>
+                              {carriage.occupancy_percentage !== null &&
+                                carriage.occupancy_percentage !== undefined && (
+                                  <div className="flex items-center gap-3">
+                                    <Meter
+                                      value={carriage.occupancy_percentage}
                                     />
+                                    <span className="text-xs font-medium text-muted-foreground tabular-nums">
+                                      {carriage.occupancy_percentage}%
+                                    </span>
                                   </div>
-                                  <span className="text-xs text-muted-foreground">
-                                    {carriage.occupancy_percentage}%
-                                  </span>
-                                </div>
-                              )}
-                          </div>
-                        )
-                      )}
-                    </div>
-                  </div>
+                                )}
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
                 )}
             </div>
           )}
