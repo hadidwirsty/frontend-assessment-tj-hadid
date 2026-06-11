@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom"
 
-import { ThemeToggle } from "@/components/ui/ThemeToggle"
+import { ThemeToggle } from "@/components/theme/ThemeToggle"
 import { toastManager } from "@/components/ui/toast"
 
 import { FilterBar } from "@/components/filters/FilterBar"
