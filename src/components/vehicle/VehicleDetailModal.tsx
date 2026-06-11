@@ -5,7 +5,14 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { VehicleDetailSkeleton } from "@/components/vehicle/VehicleDetailSkeleton"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
-import { getVehicleStatusColor, formatVehicleDate } from "@/lib/utils"
+import {
+  getVehicleStatusColor,
+  formatVehicleDate,
+  bearingToCompass,
+  speedToKmh,
+  getOccupancyLabel,
+  getOccupancyColor,
+} from "@/lib/utils"
 
 const VehicleMap = lazy(() =>
   import("../map/VehicleMap").then((module) => ({
@@ -151,6 +158,222 @@ export function VehicleDetailModal({
                   {data.vehicle.attributes.longitude}
                 </div>
               </div>
+
+              {/* SECTION A: Informasi Pergerakan */}
+              <div>
+                <h4 className="mb-3 border-b pb-2 text-sm font-medium">
+                  Informasi Pergerakan
+                </h4>
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+                  {data.vehicle.attributes.bearing !== null && (
+                    <div>
+                      <div className="text-xs text-muted-foreground">Arah</div>
+                      <div className="text-sm font-medium">
+                        {bearingToCompass(data.vehicle.attributes.bearing)} (
+                        {data.vehicle.attributes.bearing}&deg;)
+                      </div>
+                    </div>
+                  )}
+                  {data.vehicle.attributes.speed !== null && (
+                    <div>
+                      <div className="text-xs text-muted-foreground">
+                        Kecepatan
+                      </div>
+                      <div className="text-sm font-medium">
+                        {speedToKmh(data.vehicle.attributes.speed)}
+                      </div>
+                    </div>
+                  )}
+                  {data.vehicle.attributes.current_stop_sequence !== null && (
+                    <div>
+                      <div className="text-xs text-muted-foreground">
+                        Urutan Halte
+                      </div>
+                      <div className="text-sm font-medium">
+                        {data.vehicle.attributes.current_stop_sequence}
+                      </div>
+                    </div>
+                  )}
+                  {data.vehicle.attributes.revenue !== null && (
+                    <div>
+                      <div className="text-xs text-muted-foreground">
+                        Status Operasi
+                      </div>
+                      <div className="mt-1">
+                        {data.vehicle.attributes.revenue === "REVENUE" ? (
+                          <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-200">
+                            Beroperasi
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800 dark:bg-gray-800 dark:text-gray-200">
+                            Non-Operasional
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* SECTION B & C Wrapper */}
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                {/* SECTION B: Detail Rute */}
+                {data.route && (
+                  <div>
+                    <h4 className="mb-3 border-b pb-2 text-sm font-medium">
+                      Detail Rute
+                    </h4>
+                    <div className="space-y-3">
+                      <div>
+                        <span
+                          className="inline-flex items-center justify-center rounded-sm px-2 py-1 text-xs font-bold"
+                          style={{
+                            backgroundColor: `#${data.route.attributes.color || "ccc"}`,
+                            color: `#${data.route.attributes.text_color || "000"}`,
+                          }}
+                        >
+                          Rute {data.route.attributes.short_name || "-"}
+                        </span>
+                      </div>
+                      <div>
+                        <div className="text-xs text-muted-foreground">
+                          Nama Rute
+                        </div>
+                        <div className="text-sm font-medium">
+                          {data.route.attributes.long_name || "-"}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-muted-foreground">
+                          Tipe Layanan
+                        </div>
+                        <div className="text-sm font-medium">
+                          {data.route.attributes.description || "-"}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-muted-foreground">
+                          Kelas Tarif
+                        </div>
+                        <div className="text-sm font-medium">
+                          {data.route.attributes.fare_class || "-"}
+                        </div>
+                      </div>
+                      {data.vehicle.attributes.direction_id !== null &&
+                        data.route.attributes.direction_destinations && (
+                          <div>
+                            <div className="text-xs text-muted-foreground">
+                              Arah Tujuan
+                            </div>
+                            <div className="text-sm font-medium">
+                              {data.route.attributes.direction_destinations[
+                                data.vehicle.attributes.direction_id
+                              ] || "-"}
+                            </div>
+                          </div>
+                        )}
+                    </div>
+                  </div>
+                )}
+
+                {/* SECTION C: Detail Trip */}
+                {data.trip && (
+                  <div>
+                    <h4 className="mb-3 border-b pb-2 text-sm font-medium">
+                      Detail Trip
+                    </h4>
+                    <div className="space-y-3">
+                      <div>
+                        <div className="text-xs text-muted-foreground">
+                          Tujuan (Headsign)
+                        </div>
+                        <div className="text-sm font-medium">
+                          {data.trip.attributes.headsign || "-"}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-muted-foreground">
+                          Aksesibilitas
+                        </div>
+                        <div className="flex items-center gap-2 text-sm font-medium">
+                          {data.trip.attributes.wheelchair_accessible === 1 ? (
+                            <>
+                              <span className="text-lg">♿</span> Dapat diakses
+                              kursi roda
+                            </>
+                          ) : (
+                            <span className="text-muted-foreground">-</span>
+                          )}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-muted-foreground">
+                          Sepeda
+                        </div>
+                        <div className="flex items-center gap-2 text-sm font-medium">
+                          {data.trip.attributes.bikes_allowed === 1 ? (
+                            <>
+                              <span className="text-lg">🚲</span> Sepeda
+                              diizinkan
+                            </>
+                          ) : (
+                            <span className="text-muted-foreground">-</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* SECTION D: Informasi Gerbong */}
+              {data.vehicle.attributes.carriages &&
+                data.vehicle.attributes.carriages.length > 0 && (
+                  <div>
+                    <h4 className="mb-3 border-b pb-2 text-sm font-medium">
+                      Informasi Gerbong
+                    </h4>
+                    <div className="space-y-3">
+                      {data.vehicle.attributes.carriages.map(
+                        (carriage, idx) => (
+                          <div
+                            key={idx}
+                            className="flex flex-col gap-2 rounded-lg border p-3"
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-medium">
+                                {carriage.label || `Gerbong ${idx + 1}`}
+                              </span>
+                              {carriage.occupancy_status && (
+                                <span
+                                  className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold text-white ${getOccupancyColor(carriage.occupancy_status)}`}
+                                >
+                                  {getOccupancyLabel(carriage.occupancy_status)}
+                                </span>
+                              )}
+                            </div>
+                            {carriage.occupancy_percentage !== null &&
+                              carriage.occupancy_percentage !== undefined && (
+                                <div className="flex items-center gap-2">
+                                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-secondary">
+                                    <div
+                                      className="h-full bg-primary transition-all"
+                                      style={{
+                                        width: `${carriage.occupancy_percentage}%`,
+                                      }}
+                                    />
+                                  </div>
+                                  <span className="text-xs text-muted-foreground">
+                                    {carriage.occupancy_percentage}%
+                                  </span>
+                                </div>
+                              )}
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )}
             </div>
           )}
         </div>
