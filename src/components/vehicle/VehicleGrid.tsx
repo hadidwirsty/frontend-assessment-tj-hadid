@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 import { useSearchParams } from "react-router-dom"
 import { AlertCircle, Bus } from "lucide-react"
@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/empty"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Spinner } from "@/components/ui/spinner"
-import { toastManager } from "@/components/ui/toast"
 
 import { Pagination } from "@/components/Pagination"
 import { VehicleCard } from "@/components/vehicle/VehicleCard"
@@ -38,17 +37,6 @@ export function VehicleGrid() {
     routeIds,
     tripIds,
   })
-
-  useEffect(() => {
-    if (error) {
-      toastManager.add({
-        type: "error",
-        title: "Gagal Memuat Data",
-        description:
-          error.message || "Terjadi kesalahan saat menghubungi server.",
-      })
-    }
-  }, [error])
 
   const handlePageChange = (newPage: number) => {
     setSearchParams((prev) => {
