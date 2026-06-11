@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
 
-import { ToastProvider } from "@/components/ui/toast"
+import { ToastProviderResponsive } from "@/components/ui/toast-provider-responsive"
 
 import { Dashboard } from "@/pages/Dashboard"
 
@@ -20,12 +20,12 @@ function App() {
   }, [theme])
 
   return (
-    <ToastProvider>
+    <ToastProviderResponsive>
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </ToastProvider>
+    </ToastProviderResponsive>
   )
 }
 
