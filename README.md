@@ -1,5 +1,6 @@
 # Fleet Management System — Transjakarta
 
+🔗 **Live Demo:** [https://frontend-assessment-tj-hadid.vercel.app/](https://frontend-assessment-tj-hadid.vercel.app/)
 Aplikasi pemantauan armada berbasis web (*Single Page Application*) untuk memvisualisasikan data real-time kendaraan secara efisien.
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
