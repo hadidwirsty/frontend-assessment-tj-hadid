@@ -44,7 +44,10 @@ export function MeterTrack({
 }: MeterPrimitive.Track.Props): React.ReactElement {
   return (
     <MeterPrimitive.Track
-      className={cn("block h-2 w-full overflow-hidden bg-input", className)}
+      className={cn(
+        "block h-2 w-full overflow-hidden rounded-full bg-input",
+        className
+      )}
       data-slot="meter-track"
       {...props}
     />
@@ -57,7 +60,10 @@ export function MeterIndicator({
 }: MeterPrimitive.Indicator.Props): React.ReactElement {
   return (
     <MeterPrimitive.Indicator
-      className={cn("bg-primary transition-all duration-500", className)}
+      className={cn(
+        "rounded-full bg-primary transition-all duration-500",
+        className
+      )}
       data-slot="meter-indicator"
       {...props}
     />
