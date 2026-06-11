@@ -49,16 +49,22 @@ Aplikasi pemantauan armada berbasis web (*Single Page Application*) untuk memvis
 Sesuai dengan requirement penilaian, fitur yang sudah diimplementasikan meliputi:
 - **Vehicle Card Grid + Pagination**: Menampilkan data kendaraan secara dinamis.
 - **Filter Route & Trip (Multi-select + Infinite Scroll)**: Penyaringan cerdas dengan *dropdown* berbasis *lazy load*.
-- **Detail Popup Kendaraan**: Rincian status, rute, dan posisi kendaraan dalam bentuk modal terpusat.
+- **Detail Popup Kendaraan**: Rincian status, rute, dan posisi kendaraan dalam bentuk modal terpusat. Detail telah diperkaya dengan:
+  - **Informasi Pergerakan:** Arah, kecepatan, urutan halte, dan status operasi.
+  - **Detail Rute:** *Badge* warna rute, nama, tipe layanan, kelas tarif, dan arah tujuan.
+  - **Detail Trip:** *Headsign*, aksesibilitas kursi roda, dan info izin masuk sepeda.
+  - **Informasi Gerbong:** Indikator visual progres okupansi (*occupancy*) dalam komponen *collapsible*.
 - **Peta Posisi Kendaraan (Leaflet) — Bonus**: Peta integrasi *real-time* berbasis koordinat.
 - **TypeScript End-to-End — Bonus**: Type-safety murni, selaras dengan skema respon JSON API MBTA.
+- **Light/Dark Theme Toggle**: Modifikasi tema visual (default *light*, dipersistensi via `localStorage`).
+- **Global Error Handling**: Penangkapan HTTP *error* secara sentral dengan notifikasi *toast* otomatis.
 
 ## Arsitektur yang Digunakan
 
 ### 4a. Struktur Direktori
 Aplikasi mengadopsi struktur proyek *Feature-Based* untuk skalabilitas tinggi:
-- `src/modules/`: Modul *domain-specific* seperti tipe data (DTO) dan abstraksi API *Service* (fitur vehicle, route, trip).
-- `src/shared/`: Berisi modul *shared/common* (konfigurasi instansiasi *Axios client*).
+- `src/modules/`: Modul fitur (seperti `vehicle`, `route`, `trip`) di mana masing-masing dipecah rapi ke dalam *entity*, *DTO*, *response type*, dan antarmuka *service API*.
+- `src/shared/`: Berisi pilar infrastruktur gabungan (instansiasi *Axios client* dan tipe dasar JSON:API).
 - `src/components/`: Tempat berkumpulnya *Reusable React UI*, dipilah menjadi generik (shadcn) dan *feature-level* (vehicle, filters, map).
 - `src/hooks/`: Koleksi *Custom Hooks* untuk enkapsulasi abstraksi *TanStack Query*.
 - `src/pages/`: Komponen agregasi di tingkat halaman (seperti `Dashboard.tsx`).
@@ -92,8 +98,23 @@ Aplikasi mengadopsi struktur proyek *Feature-Based* untuk skalabilitas tinggi:
 
 ### 4f. State Management
 - **URL Search Params:** Mengakomodasi filter selektif aktif dan memori paginasi agar halaman seutuhnya bersifat *bookmarkable*.
-- **Zustand:** Disiapkan untuk mengakomodir pengelolaan status global berskala interaksi antarmuka (UI state). *(Catatan teknis nyata: Modal detail kendaraan pada fasa saat ini di-*manage* lewat reaktivitas state React).*
+- **Zustand:** Digunakan untuk mengakomodir pengelolaan status global berskala interaksi antarmuka (*UI state*), termasuk penyimpanan state *theme* persisten yang ditarik dari `localStorage`.
 - **Tidak Menggunakan Redux:** Kompleksitas (*boilerplate*) milik arsitektur Redux dinilai sebagai tindakan manipulasi berlebih dan sangat tidak efisien untuk ukuran skalabilitas proyek ini.
+
+### 4g. Clean Code Standards
+- **Import Ordering:** Memisahkan skema *import* ke dalam 6 blok hierarki terpisah (React, *Third-party*, UI Base, Components, Hooks/Utils, Types).
+- **Component Internal Structure:** Menerapkan regulasi urutan komponen konstan (8 area urutan termasuk Hooks, Derived State, Handlers, hingga Main Return).
+- **Explicit Return Types:** Seluruh modul *service*, utilitas, serta *custom hooks* mendefinisikan *return type* murni secara ketat di ranah TypeScript.
+
+### 4h. Global Error Handling
+- **Axios Interceptor:** Menangkap semua HTTP *error* di tingkat lapisan bawah secara merata.
+- **Error Mapping:** Memetakan *status code* MBTA (e.g., 404, 500, *network errors*) dan menerjemahkannya menjadi dialog kesalahan informatif berbahasa Indonesia.
+- **Toast Notification:** Menampilkan umpan balik seketika ke sudut pandang pengguna via komponen terpusat `<ToastProvider>`.
+
+### 4i. Theme System
+- **Tailwind CSS darkMode:** Mengandalkan pemicu deklaratif melalui kelas utilitas HTML (`'class'`).
+- **Zustand + Persistence:** Status preferensi tampilan digabungkan menggunakan fungsi *middleware persist* `localStorage`.
+- **Default State:** Tema aplikasi konsisten diawali dari konfigurasi *light* (*light-mode forced default*) memintas status spesifik pengaturan *system preferences*.
 
 ## Tech Stack
 
