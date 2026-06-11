@@ -1,9 +1,10 @@
 import { useSearchParams } from "react-router-dom"
 
-import { FilterBar } from "@/components/filters/FilterBar"
-import { VehicleGrid } from "@/components/vehicle/VehicleGrid"
 import { ThemeToggle } from "@/components/ui/ThemeToggle"
 import { toastManager } from "@/components/ui/toast"
+
+import { FilterBar } from "@/components/filters/FilterBar"
+import { VehicleGrid } from "@/components/vehicle/VehicleGrid"
 
 export function Dashboard() {
   const [searchParams, setSearchParams] = useSearchParams()

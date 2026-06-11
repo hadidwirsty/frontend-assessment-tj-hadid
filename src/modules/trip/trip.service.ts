@@ -1,4 +1,5 @@
 import { mbtaClient } from "@/shared"
+
 import type { GetTripsParams } from "./types/trip.dto"
 import type { TripListResponse } from "./types/trip.response"
 

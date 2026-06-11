@@ -1,8 +1,11 @@
 import { useEffect } from "react"
-import { Routes, Route, Navigate } from "react-router-dom"
-import { Dashboard } from "@/pages/Dashboard"
-import { useThemeStore } from "@/store/themeStore"
+import { Navigate, Route, Routes } from "react-router-dom"
+
 import { ToastProvider } from "@/components/ui/toast"
+
+import { Dashboard } from "@/pages/Dashboard"
+
+import { useThemeStore } from "@/store/themeStore"
 
 function App() {
   const { theme } = useThemeStore()

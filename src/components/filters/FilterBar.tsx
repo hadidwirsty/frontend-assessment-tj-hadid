@@ -1,7 +1,9 @@
+import { Button } from "@/components/ui/button"
+
+import { MultiSelectDropdown } from "./MultiSelectDropdown"
+
 import { useRoutes } from "@/hooks/useRoutes"
 import { useTrips } from "@/hooks/useTrips"
-import { MultiSelectDropdown } from "./MultiSelectDropdown"
-import { Button } from "@/components/ui/button"
 
 interface FilterBarProps {
   selectedRouteIds: string[]
@@ -32,6 +34,8 @@ export function FilterBar({
     sentinelRef: tripsSentinelRef,
   } = useTrips(selectedRouteIds)
 
+  const hasAnyFilter = selectedRouteIds.length > 0 || selectedTripIds.length > 0
+
   const toggleRoute = (id: string) => {
     if (selectedRouteIds.includes(id)) {
       onChangeRoutes(selectedRouteIds.filter((r) => r !== id))
@@ -50,8 +54,6 @@ export function FilterBar({
 
   const clearRoutes = () => onChangeRoutes([])
   const clearTrips = () => onChangeTrips([])
-
-  const hasAnyFilter = selectedRouteIds.length > 0 || selectedTripIds.length > 0
 
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-center">

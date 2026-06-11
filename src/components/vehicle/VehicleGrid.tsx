@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+
 import { useSearchParams } from "react-router-dom"
 import { AlertCircle, Bus } from "lucide-react"
 
@@ -12,10 +13,12 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Spinner } from "@/components/ui/spinner"
 import { toastManager } from "@/components/ui/toast"
+
 import { Pagination } from "@/components/Pagination"
 import { VehicleCard } from "@/components/vehicle/VehicleCard"
 import { VehicleCardSkeleton } from "@/components/vehicle/VehicleCardSkeleton"
 import { VehicleDetailModal } from "@/components/vehicle/VehicleDetailModal"
+
 import { useVehicles } from "@/hooks/useVehicles"
 
 export function VehicleGrid() {
@@ -23,10 +26,9 @@ export function VehicleGrid() {
   const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(
     null
   )
-
-  const page = Number(searchParams.get("page")) || 1
   const [perPage, setPerPage] = useState(10)
 
+  const page = Number(searchParams.get("page")) || 1
   const routeIds = searchParams.getAll("route")
   const tripIds = searchParams.getAll("trip")
 
