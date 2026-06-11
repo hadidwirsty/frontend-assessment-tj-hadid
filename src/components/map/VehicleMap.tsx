@@ -1,7 +1,7 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
-import { MapPinOff } from "lucide-react"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
+import { MapPinOff } from "lucide-react"
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 delete (L.Icon.Default.prototype as any)._getIconUrl

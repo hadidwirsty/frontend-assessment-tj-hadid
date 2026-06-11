@@ -1,7 +1,15 @@
 import { useInfiniteList } from "./useInfiniteList"
-import { getRoutes, type RouteResource } from "@/modules/route"
+import { getRoutes } from "@/modules/route"
 
-export function useRoutes() {
+import type { RouteResource } from "@/modules/route"
+
+export function useRoutes(): {
+  items: RouteResource[]
+  loading: boolean
+  hasMore: boolean
+  error: unknown
+  sentinelRef: (node: HTMLElement | null) => void
+} {
   return useInfiniteList<RouteResource>({
     queryKey: ["routes"],
     fetchFn: async ({ pageParam, signal }) => {

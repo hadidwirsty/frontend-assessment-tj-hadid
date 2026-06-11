@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from "react"
+import { useEffect, useRef, useState } from "react"
+
 import { Check, ChevronDown, X } from "lucide-react"
 
 interface Item {
@@ -31,6 +32,12 @@ export function MultiSelectDropdown({
   const [search, setSearch] = useState("")
   const dropdownRef = useRef<HTMLDivElement>(null)
 
+  const filteredItems = items.filter((item) =>
+    item.label.toLowerCase().includes(search.toLowerCase())
+  )
+
+  const selectedItems = items.filter((item) => selectedIds.includes(item.id))
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -43,12 +50,6 @@ export function MultiSelectDropdown({
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
-
-  const filteredItems = items.filter((item) =>
-    item.label.toLowerCase().includes(search.toLowerCase())
-  )
-
-  const selectedItems = items.filter((item) => selectedIds.includes(item.id))
 
   return (
     <div className="relative w-full md:w-72" ref={dropdownRef}>

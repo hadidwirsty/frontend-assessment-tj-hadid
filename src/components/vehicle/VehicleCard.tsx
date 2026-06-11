@@ -1,5 +1,6 @@
+import { formatVehicleDate, getVehicleStatusColor } from "@/lib/utils"
+
 import type { VehicleResource } from "@/modules/vehicle"
-import { getVehicleStatusColor, formatVehicleDate } from "@/lib/utils"
 
 interface VehicleCardProps {
   vehicle: VehicleResource

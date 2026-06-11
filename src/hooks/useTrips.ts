@@ -1,7 +1,15 @@
 import { useInfiniteList } from "./useInfiniteList"
-import { getTrips, type TripResource } from "@/modules/trip"
+import { getTrips } from "@/modules/trip"
 
-export function useTrips(routeIds?: string[]) {
+import type { TripResource } from "@/modules/trip"
+
+export function useTrips(routeIds?: string[]): {
+  items: TripResource[]
+  loading: boolean
+  hasMore: boolean
+  error: unknown
+  sentinelRef: (node: HTMLElement | null) => void
+} {
   const isEnabled = !!routeIds && routeIds.length > 0
 
   return useInfiniteList<TripResource>({
