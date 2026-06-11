@@ -1,4 +1,6 @@
-import { formatVehicleDate, getVehicleStatusColor } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
+
+import { formatVehicleDate, getVehicleStatusVariant } from "@/lib/utils"
 
 import type { VehicleResource } from "@/modules/vehicle"
 
@@ -26,13 +28,9 @@ export function VehicleCard({ vehicle, onClick }: VehicleCardProps) {
             </h3>
           </div>
           {current_status && (
-            <span
-              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${getVehicleStatusColor(
-                current_status
-              )}`}
-            >
+            <Badge variant={getVehicleStatusVariant(current_status)}>
               {current_status.replace(/_/g, " ")}
-            </span>
+            </Badge>
           )}
         </div>
         <div className="flex items-center justify-between">
