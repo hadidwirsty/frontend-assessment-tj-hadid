@@ -44,6 +44,42 @@ Aplikasi pemantauan armada berbasis web (*Single Page Application*) untuk memvis
 - Build production: `pnpm run build`
 - Preview hasil build: `pnpm run preview`
 
+## Deployment
+
+### Vercel (Rekomendasi)
+
+**Cara 1 — Via Vercel Dashboard (paling mudah):**
+1. Push branch `development` ke GitHub
+2. Buka https://vercel.com dan login dengan akun GitHub
+3. Klik "Add New Project" → Import repository ini
+4. Vercel otomatis mendeteksi Vite — pastikan konfigurasi berikut:
+   - Framework Preset: Vite
+   - Build Command: `pnpm run build`
+   - Output Directory: `dist`
+   - Install Command: `pnpm install`
+5. Tambahkan Environment Variable:
+   - Key: `VITE_MBTA_BASE_URL`
+   - Value: `https://api-v3.mbta.com`
+6. Klik Deploy
+
+**Cara 2 — Via Vercel CLI:**
+```bash
+# Install Vercel CLI
+pnpm add -g vercel
+
+# Login
+vercel login
+
+# Deploy dari branch development
+vercel
+
+# Deploy ke production
+vercel --prod
+```
+
+> **Catatan:** Setiap push ke branch `main` akan otomatis trigger
+> re-deployment jika repository sudah terhubung ke Vercel.
+
 ## Fitur Aplikasi
 
 Sesuai dengan requirement penilaian, fitur yang sudah diimplementasikan meliputi:
